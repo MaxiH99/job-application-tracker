@@ -6,7 +6,8 @@ const sqlite = openDatabaseSync('applications.db');
 sqlite.execSync(`
   CREATE TABLE IF NOT EXISTS categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    color TEXT NOT NULL DEFAULT '#0F172A'
   );
 `);
 

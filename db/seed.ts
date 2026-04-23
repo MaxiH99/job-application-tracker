@@ -12,9 +12,9 @@ export async function seedApplicationsIfEmpty() {
 
   if (existingCategories.length === 0) {
     const insertedCategories = await db.insert(categories).values([
-      { name: 'Tech' },
-      { name: 'Finance' },
-      { name: 'Consulting' },
+      { name: 'Tech', color: '#2563EB' },
+      { name: 'Finance', color: '#16A34A' },
+      { name: 'Consulting', color: '#F59E0B' },
     ]).returning();
 
     techId = insertedCategories[0].id;

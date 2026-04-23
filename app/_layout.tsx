@@ -18,6 +18,7 @@ export type Application = {
 export type Category = {
   id: number;
   name: string;
+  color: string;
 };
 
 export type Target = {
@@ -62,6 +63,27 @@ export default function RootLayout() {
     <ApplicationContext.Provider value={{ applications, setApplications, categories, setCategories, targets, setTargets }}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="add"
+          options={{
+            title: 'Add Application',
+            headerBackTitle: 'Back',
+          }}
+        />
+        <Stack.Screen
+          name="application/[id]"
+          options={{
+            title: 'Application Details',
+            headerBackTitle: 'Applications',
+          }}
+        />
+        <Stack.Screen
+          name="application/[id]/edit"
+          options={{
+            title: 'Edit Application',
+            headerBackTitle: 'Details',
+          }}
+        />
       </Stack>
     </ApplicationContext.Provider>
   );

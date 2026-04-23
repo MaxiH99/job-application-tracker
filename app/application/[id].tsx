@@ -42,11 +42,23 @@ export default function ApplicationDetail() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScreenHeader title={application.companyName} subtitle="Application details" />
+
       <View style={styles.tags}>
         <InfoTag label="Role" value={application.roleTitle} />
         <InfoTag label="Priority" value={String(application.priorityScore)} />
         <InfoTag label="Status" value={application.status} />
-        <InfoTag label="Category" value={category ? category.name : 'Unknown'} />
+      </View>
+
+      <View style={styles.categoryRow}>
+        <View
+          style={[
+            styles.categoryDot,
+            { backgroundColor: category ? category.color : '#0F172A' },
+          ]}
+        />
+        <Text style={styles.categoryText}>
+          {category ? category.name : 'Unknown'}
+        </Text>
       </View>
 
       <Text style={styles.notes}>
@@ -79,7 +91,23 @@ const styles = StyleSheet.create({
   tags: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    marginBottom: 12,
+  },
+  categoryRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
     marginBottom: 18,
+  },
+  categoryDot: {
+    borderRadius: 999,
+    height: 12,
+    marginRight: 8,
+    width: 12,
+  },
+  categoryText: {
+    color: '#374151',
+    fontSize: 14,
+    fontWeight: '500',
   },
   buttonSpacing: {
     marginTop: 10,

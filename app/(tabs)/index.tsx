@@ -18,38 +18,45 @@ export default function IndexScreen() {
   const router = useRouter();
   const context = useContext(ApplicationContext);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedPriority, setSelectedPriority] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [sortPriority, setSortPriority] = useState('None');
 
   if (!context) return null;
 
-  const { applications } = context;
+  const { applications, categories } = context;
   const normalizedQuery = searchQuery.trim().toLowerCase();
 
-  const priorityOptions = [
+  const categoryOptions = [
     'All',
-    ...Array.from(
-      new Set(
-        applications.map((application: Application) =>
-          String(application.priorityScore)
-        )
-      )
-    ).sort((a, b) => Number(a) - Number(b)),
+    ...categories.map((category) => category.name),
   ];
 
-  const filteredApplications = applications.filter(
-    (application: Application) => {
+  const filteredApplications = applications
+    .filter((application: Application) => {
       const matchesSearch =
         normalizedQuery.length === 0 ||
         application.companyName.toLowerCase().includes(normalizedQuery) ||
         application.roleTitle.toLowerCase().includes(normalizedQuery);
 
-      const matchesPriority =
-        selectedPriority === 'All' ||
-        String(application.priorityScore) === selectedPriority;
+      const category = categories.find(
+        (c) => c.id === application.categoryId
+      );
 
-      return matchesSearch && matchesPriority;
-    }
-  );
+      const matchesCategory =
+        selectedCategory === 'All' ||
+        category?.name === selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      if (sortPriority === 'Low to High') {
+        return a.priorityScore - b.priorityScore;
+      }
+      if (sortPriority === 'High to Low') {
+        return b.priorityScore - a.priorityScore;
+      }
+      return 0;
+    });
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -74,16 +81,17 @@ export default function IndexScreen() {
           style={styles.searchInput}
         />
 
+        <Text style={styles.filterLabel}>Filter by Category</Text>
         <View style={styles.filterRow}>
-          {priorityOptions.map((priority) => {
-            const isSelected = selectedPriority === priority;
+          {categoryOptions.map((category) => {
+            const isSelected = selectedCategory === category;
 
             return (
               <Pressable
-                key={priority}
-                accessibilityLabel={`Filter by priority ${priority}`}
+                key={category}
+                accessibilityLabel={`Filter by category ${category}`}
                 accessibilityRole="button"
-                onPress={() => setSelectedPriority(priority)}
+                onPress={() => setSelectedCategory(category)}
                 style={[
                   styles.filterButton,
                   isSelected && styles.filterButtonSelected,
@@ -95,7 +103,36 @@ export default function IndexScreen() {
                     isSelected && styles.filterButtonTextSelected,
                   ]}
                 >
-                  {priority}
+                  {category}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+
+        <Text style={styles.filterLabel}>Sort by Priority</Text>
+        <View style={styles.filterRow}>
+          {['None', 'Low to High', 'High to Low'].map((option) => {
+            const isSelected = sortPriority === option;
+
+            return (
+              <Pressable
+                key={option}
+                accessibilityLabel={`Sort by priority ${option}`}
+                accessibilityRole="button"
+                onPress={() => setSortPriority(option)}
+                style={[
+                  styles.filterButton,
+                  isSelected && styles.filterButtonSelected,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.filterButtonText,
+                    isSelected && styles.filterButtonTextSelected,
+                  ]}
+                >
+                  {option}
                 </Text>
               </Pressable>
             );
@@ -143,11 +180,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
+  filterLabel: {
+    color: '#0F172A',
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 14,
+    marginBottom: 8,
+  },
   filterRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginTop: 10,
+    marginTop: 2,
   },
   filterButton: {
     backgroundColor: '#FFFFFF',

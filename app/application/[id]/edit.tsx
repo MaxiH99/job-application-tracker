@@ -6,7 +6,7 @@ import { applications as applicationsTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useContext, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Application, ApplicationContext } from '../../_layout';
 
@@ -20,6 +20,7 @@ export default function EditApplication() {
   const [priorityScore, setPriorityScore] = useState('');
   const [notes, setNotes] = useState('');
   const [status, setStatus] = useState('Applied');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
   const application = context?.applications.find(
     (a: Application) => a.id === Number(id)
@@ -33,13 +34,16 @@ export default function EditApplication() {
     setPriorityScore(String(application.priorityScore));
     setNotes(application.notes ?? '');
     setStatus(application.status ?? 'Applied');
+    setSelectedCategoryId(application.categoryId);
   }, [application]);
 
   if (!context || !application) return null;
 
-  const { setApplications } = context;
+  const { setApplications, categories } = context;
 
   const saveChanges = async () => {
+    if (!selectedCategoryId) return;
+
     await db
       .update(applicationsTable)
       .set({
@@ -49,6 +53,7 @@ export default function EditApplication() {
         priorityScore: Number(priorityScore),
         notes,
         status,
+        categoryId: selectedCategoryId,
       })
       .where(eq(applicationsTable.id, Number(id)));
 
@@ -60,49 +65,80 @@ export default function EditApplication() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScreenHeader title="Edit Application" subtitle={`Update ${application.companyName}`} />
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <ScreenHeader title="Edit Application" subtitle={`Update ${application.companyName}`} />
 
-      <View style={styles.form}>
-        <FormField label="Company Name" value={companyName} onChangeText={setCompanyName} />
-        <FormField label="Role Title" value={roleTitle} onChangeText={setRoleTitle} />
-        <FormField label="Application Date" value={applicationDate} onChangeText={setApplicationDate} />
-        <FormField label="Priority Score" value={priorityScore} onChangeText={setPriorityScore} />
-        <FormField label="Notes" value={notes} onChangeText={setNotes} />
+        <View style={styles.form}>
+          <FormField label="Company Name" value={companyName} onChangeText={setCompanyName} />
+          <FormField label="Role Title" value={roleTitle} onChangeText={setRoleTitle} />
+          <FormField label="Application Date" value={applicationDate} onChangeText={setApplicationDate} />
+          <FormField label="Priority Score" value={priorityScore} onChangeText={setPriorityScore} />
+          <FormField label="Notes" value={notes} onChangeText={setNotes} />
 
-        <Text style={styles.statusLabel}>Status</Text>
-        <View style={styles.statusRow}>
-          {['Applied', 'Interview', 'Offer', 'Rejected'].map((statusOption) => {
-            const isSelected = status === statusOption;
+          <Text style={styles.sectionLabel}>Category</Text>
+          <View style={styles.optionRow}>
+            {categories.map((category) => {
+              const isSelected = selectedCategoryId === category.id;
 
-            return (
-              <Pressable
-                key={statusOption}
-                accessibilityLabel={`Select ${statusOption} status`}
-                accessibilityRole="button"
-                onPress={() => setStatus(statusOption)}
-                style={[
-                  styles.statusButton,
-                  isSelected && styles.statusButtonSelected,
-                ]}
-              >
-                <Text
+              return (
+                <Pressable
+                  key={category.id}
+                  accessibilityLabel={`Select ${category.name} category`}
+                  accessibilityRole="button"
+                  onPress={() => setSelectedCategoryId(category.id)}
                   style={[
-                    styles.statusButtonText,
-                    isSelected && styles.statusButtonTextSelected,
+                    styles.optionButton,
+                    isSelected && styles.optionButtonSelected,
                   ]}
                 >
-                  {statusOption}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
-      </View>
+                  <Text
+                    style={[
+                      styles.optionButtonText,
+                      isSelected && styles.optionButtonTextSelected,
+                    ]}
+                  >
+                    {category.name}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
 
-      <PrimaryButton label="Save Changes" onPress={saveChanges} />
-      <View style={styles.buttonSpacing}>
-        <PrimaryButton label="Cancel" variant="secondary" onPress={() => router.back()} />
-      </View>
+          <Text style={styles.sectionLabel}>Status</Text>
+          <View style={styles.optionRow}>
+            {['Applied', 'Interview', 'Offer', 'Rejected'].map((statusOption) => {
+              const isSelected = status === statusOption;
+
+              return (
+                <Pressable
+                  key={statusOption}
+                  accessibilityLabel={`Select ${statusOption} status`}
+                  accessibilityRole="button"
+                  onPress={() => setStatus(statusOption)}
+                  style={[
+                    styles.optionButton,
+                    isSelected && styles.optionButtonSelected,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.optionButtonText,
+                      isSelected && styles.optionButtonTextSelected,
+                    ]}
+                  >
+                    {statusOption}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+
+        <PrimaryButton label="Save Changes" onPress={saveChanges} />
+        <View style={styles.buttonSpacing}>
+          <PrimaryButton label="Cancel" variant="secondary" onPress={() => router.back()} />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -113,26 +149,29 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
+  content: {
+    paddingBottom: 24,
+  },
   form: {
     marginBottom: 6,
   },
   buttonSpacing: {
     marginTop: 10,
   },
-  statusLabel: {
+  sectionLabel: {
     color: '#0F172A',
     fontSize: 14,
     fontWeight: '600',
     marginBottom: 8,
     marginTop: 10,
   },
-  statusRow: {
+  optionRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
     marginBottom: 12,
   },
-  statusButton: {
+  optionButton: {
     backgroundColor: '#FFFFFF',
     borderColor: '#94A3B8',
     borderRadius: 999,
@@ -140,16 +179,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
-  statusButtonSelected: {
+  optionButtonSelected: {
     backgroundColor: '#0F172A',
     borderColor: '#0F172A',
   },
-  statusButtonText: {
+  optionButtonText: {
     color: '#0F172A',
     fontSize: 14,
     fontWeight: '500',
   },
-  statusButtonTextSelected: {
+  optionButtonTextSelected: {
     color: '#FFFFFF',
   },
 });

@@ -11,17 +11,22 @@ type Props = {
 export default function ApplicationCard({ application }: Props) {
   const router = useRouter();
   const context = useContext(ApplicationContext);
-  
+
   if (!context) return null;
 
   const { categories } = context;
-  const openDetails = () =>
-    router.push({ pathname: '/application/[id]', params: { id: application.id.toString() } });
-  const applicationSummary = `${application.companyName}, ${application.roleTitle}, Priority ${application.priorityScore}`;
 
   const category = categories.find(
     (c) => c.id === application.categoryId
   );
+
+  const openDetails = () =>
+    router.push({
+      pathname: '/application/[id]',
+      params: { id: application.id.toString() },
+    });
+
+  const applicationSummary = `${application.companyName}, ${application.roleTitle}, Priority ${application.priorityScore}`;
 
   return (
     <Pressable
@@ -41,10 +46,18 @@ export default function ApplicationCard({ application }: Props) {
         <InfoTag label="Role" value={application.roleTitle} />
         <InfoTag label="Priority" value={String(application.priorityScore)} />
         <InfoTag label="Status" value={application.status} />
-        <InfoTag
-          label="Category"
-          value={category ? category.name : 'Unknown'}
+      </View>
+
+      <View style={styles.categoryRow}>
+        <View
+          style={[
+            styles.categoryDot,
+            { backgroundColor: category ? category.color : '#0F172A' },
+          ]}
         />
+        <Text style={styles.categoryText}>
+          {category ? category.name : 'Unknown'}
+        </Text>
       </View>
     </Pressable>
   );
@@ -71,5 +84,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 10,
+  },
+  categoryRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  categoryDot: {
+    borderRadius: 999,
+    height: 12,
+    marginRight: 8,
+    width: 12,
+  },
+  categoryText: {
+    color: '#374151',
+    fontSize: 14,
+    fontWeight: '500',
   },
 });
