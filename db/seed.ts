@@ -35,6 +35,7 @@ export async function seedApplicationsIfEmpty() {
         priorityScore: 5,
         notes: 'Dream company',
         categoryId: techId,
+        status: 'Applied',
       },
       {
         companyName: 'Deloitte',
@@ -43,6 +44,7 @@ export async function seedApplicationsIfEmpty() {
         priorityScore: 4,
         notes: 'Graduate programme',
         categoryId: consultingId,
+        status: 'Interview',
       },
       {
         companyName: 'Amazon',
@@ -51,6 +53,7 @@ export async function seedApplicationsIfEmpty() {
         priorityScore: 3,
         notes: 'Backup option',
         categoryId: financeId,
+        status: 'Rejected',
       },
     ]);
   }

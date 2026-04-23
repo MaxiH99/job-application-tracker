@@ -5,7 +5,7 @@ import { db } from '@/db/client';
 import { applications as applicationsTable } from '@/db/schema';
 import { useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View, } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ApplicationContext } from './_layout';
 
@@ -18,6 +18,7 @@ export default function AddApplication() {
   const [priorityScore, setPriorityScore] = useState('');
   const [notes, setNotes] = useState('');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [status, setStatus] = useState('Applied');
 
   if (!context) return null;
   const { setApplications, categories } = context;
@@ -32,6 +33,7 @@ export default function AddApplication() {
       priorityScore: Number(priorityScore),
       notes,
       categoryId: selectedCategoryId,
+      status,
     });
 
     const rows = await db.select().from(applicationsTable);
@@ -41,11 +43,9 @@ export default function AddApplication() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <ScreenHeader title="Add Application" subtitle="Create a new job application." />
+
         <View style={styles.form}>
           <FormField label="Company Name" value={companyName} onChangeText={setCompanyName} />
           <FormField label="Role Title" value={roleTitle} onChangeText={setRoleTitle} />
@@ -81,9 +81,39 @@ export default function AddApplication() {
               );
             })}
           </View>
+
+          <Text style={styles.categoryLabel}>Status</Text>
+          <View style={styles.categoryRow}>
+            {['Applied', 'Interview', 'Offer', 'Rejected'].map((statusOption) => {
+              const isSelected = status === statusOption;
+
+              return (
+                <Pressable
+                  key={statusOption}
+                  accessibilityLabel={`Select ${statusOption} status`}
+                  accessibilityRole="button"
+                  onPress={() => setStatus(statusOption)}
+                  style={[
+                    styles.categoryButton,
+                    isSelected && styles.categoryButtonSelected,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.categoryButtonText,
+                      isSelected && styles.categoryButtonTextSelected,
+                    ]}
+                  >
+                    {statusOption}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
         </View>
 
         <PrimaryButton label="Save Application" onPress={saveApplication} />
+
         <View style={styles.backButton}>
           <PrimaryButton label="Cancel" variant="secondary" onPress={() => router.back()} />
         </View>

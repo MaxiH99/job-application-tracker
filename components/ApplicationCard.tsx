@@ -40,6 +40,7 @@ export default function ApplicationCard({ application }: Props) {
       <View style={styles.tags}>
         <InfoTag label="Role" value={application.roleTitle} />
         <InfoTag label="Priority" value={String(application.priorityScore)} />
+        <InfoTag label="Status" value={application.status} />
         <InfoTag
           label="Category"
           value={category ? category.name : 'Unknown'}

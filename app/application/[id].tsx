@@ -1,13 +1,13 @@
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useContext } from 'react';
 import InfoTag from '@/components/ui/info-tag';
 import PrimaryButton from '@/components/ui/primary-button';
 import ScreenHeader from '@/components/ui/screen-header';
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { eq } from 'drizzle-orm';
 import { db } from '@/db/client';
 import { applications as applicationsTable } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useContext } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Application, ApplicationContext } from '../_layout';
 
 export default function ApplicationDetail() {
@@ -17,13 +17,17 @@ export default function ApplicationDetail() {
 
   if (!context) return null;
 
-  const { applications, setApplications } = context;
+  const { applications, setApplications, categories } = context;
 
   const application = applications.find(
     (a: Application) => a.id === Number(id)
   );
 
   if (!application) return null;
+
+  const category = categories.find(
+    (c) => c.id === application.categoryId
+  );
 
   const deleteApplication = async () => {
     await db
@@ -41,6 +45,8 @@ export default function ApplicationDetail() {
       <View style={styles.tags}>
         <InfoTag label="Role" value={application.roleTitle} />
         <InfoTag label="Priority" value={String(application.priorityScore)} />
+        <InfoTag label="Status" value={application.status} />
+        <InfoTag label="Category" value={category ? category.name : 'Unknown'} />
       </View>
 
       <Text style={styles.notes}>

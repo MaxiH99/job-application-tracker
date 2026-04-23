@@ -12,6 +12,7 @@ export type Application = {
   priorityScore: number;
   notes: string;
   categoryId: number;
+  status: string;
 };
 
 export type Category = {

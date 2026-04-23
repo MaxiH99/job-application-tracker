@@ -19,6 +19,7 @@ sqlite.execSync(`
     priority_score INTEGER NOT NULL DEFAULT 0,
     notes TEXT,
     category_id INTEGER NOT NULL,
+    status TEXT NOT NULL DEFAULT 'Applied',
     FOREIGN KEY (category_id) REFERENCES categories(id)
   );
 `);

@@ -13,6 +13,7 @@ export const applications = sqliteTable('applications', {
   priorityScore: integer('priority_score').notNull().default(0),
   notes: text('notes'),
   categoryId: integer('category_id').notNull(),
+  status: text('status').notNull().default('Applied'),
 });
 
 export const targets = sqliteTable('targets', {
