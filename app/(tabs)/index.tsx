@@ -4,7 +4,6 @@ import ScreenHeader from '@/components/ui/screen-header';
 import { useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
 import {
-  Dimensions,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -12,7 +11,6 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { BarChart } from 'react-native-chart-kit';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Application, ApplicationContext } from '../_layout';
 
@@ -24,36 +22,8 @@ export default function IndexScreen() {
 
   if (!context) return null;
 
-  const { applications, targets, categories } = context;
+  const { applications } = context;
   const normalizedQuery = searchQuery.trim().toLowerCase();
-
-  const weeklyTarget = targets.find((t) => t.type === 'weekly');
-  const monthlyTarget = targets.find((t) => t.type === 'monthly');
-
-  const weeklyProgress = applications.length;
-  const monthlyProgress = applications.length;
-
-  const screenWidth = Dimensions.get('window').width;
-
-  const categoryCounts = categories.map((category) => {
-    const count = applications.filter(
-      (app) => app.categoryId === category.id
-    ).length;
-
-    return {
-      name: category.name,
-      count,
-    };
-  });
-
-  const chartData = {
-    labels: categoryCounts.map((c) => c.name),
-    datasets: [
-      {
-        data: categoryCounts.map((c) => c.count),
-      },
-    ],
-  };
 
   const priorityOptions = [
     'All',
@@ -96,49 +66,6 @@ export default function IndexScreen() {
           label="Add Application"
           onPress={() => router.push({ pathname: '../add' })}
         />
-
-        <View style={styles.targetCard}>
-          <Text style={styles.targetTitle}>Targets</Text>
-
-          <Text style={styles.targetText}>
-            Weekly: {weeklyProgress} / {weeklyTarget ? weeklyTarget.amount : 0}
-          </Text>
-          <Text style={styles.targetText}>
-            Remaining: {weeklyTarget ? Math.max(weeklyTarget.amount - weeklyProgress, 0) : 0}
-          </Text>
-
-          <Text style={styles.targetText}>
-            Monthly: {monthlyProgress} / {monthlyTarget ? monthlyTarget.amount : 0}
-          </Text>
-          <Text style={styles.targetText}>
-            Remaining: {monthlyTarget ? Math.max(monthlyTarget.amount - monthlyProgress, 0) : 0}
-          </Text>
-        </View>
-
-        <View style={styles.chartCard}>
-          <Text style={styles.chartTitle}>Applications by Category</Text>
-
-          <BarChart
-            data={chartData}
-            width={screenWidth - 36}
-            height={220}
-            yAxisLabel=""
-            yAxisSuffix=""
-            fromZero
-            chartConfig={{
-              backgroundColor: '#FFFFFF',
-              backgroundGradientFrom: '#FFFFFF',
-              backgroundGradientTo: '#FFFFFF',
-              decimalPlaces: 0,
-              color: (opacity = 1) => `rgba(15, 23, 42, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(15, 23, 42, ${opacity})`,
-            }}
-            style={{
-              marginTop: 10,
-              borderRadius: 12,
-            }}
-          />
-        </View>
 
         <TextInput
           value={searchQuery}
@@ -247,37 +174,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 8,
     textAlign: 'center',
-  },
-  targetCard: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#E5E7EB',
-    borderRadius: 14,
-    borderWidth: 1,
-    marginTop: 14,
-    padding: 14,
-  },
-  targetTitle: {
-    color: '#111827',
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 8,
-  },
-  targetText: {
-    color: '#475569',
-    fontSize: 15,
-    marginBottom: 4,
-  },
-  chartCard: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#E5E7EB',
-    borderRadius: 14,
-    borderWidth: 1,
-    marginTop: 14,
-    padding: 14,
-  },
-  chartTitle: {
-    color: '#111827',
-    fontSize: 18,
-    fontWeight: '700',
   },
 });

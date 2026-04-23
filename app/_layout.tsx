@@ -60,7 +60,9 @@ export default function RootLayout() {
 
   return (
     <ApplicationContext.Provider value={{ applications, setApplications, categories, setCategories, targets, setTargets }}>
-      <Stack />
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
     </ApplicationContext.Provider>
   );
 }

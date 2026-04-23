@@ -7,6 +7,10 @@ export default function TabLayout() {
         name="index"
         options={{ title: 'Applications' }}
       />
+      <Tabs.Screen
+        name="dashboard"
+        options={{ title: 'Dashboard' }}
+      />
     </Tabs>
   );
 }
