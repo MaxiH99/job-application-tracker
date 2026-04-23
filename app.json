@@ -48,15 +48,15 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "0c1d33ff-849f-4cbd-86b3-79efbfa0ae26"
+        "projectId": "5fc3c650-3b62-4d38-a329-4bcb73acdcb5"
       }
     },
-    "owner": "rory1",
     "runtimeVersion": {
       "policy": "appVersion"
     },
+    "owner": "maxih99",
     "updates": {
-      "url": "https://u.expo.dev/0c1d33ff-849f-4cbd-86b3-79efbfa0ae26"
+      "url": "https://u.expo.dev/5fc3c650-3b62-4d38-a329-4bcb73acdcb5"
     }
   }
 }
