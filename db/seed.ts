@@ -1,12 +1,8 @@
 import { db } from './client';
-import { applications, categories } from './schema';
+import { applications, categories, targets } from './schema';
 
 export async function seedApplicationsIfEmpty() {
   const existingApplications = await db.select().from(applications);
-
-  if (existingApplications.length > 0) {
-    return;
-  }
 
   const existingCategories = await db.select().from(categories);
 
@@ -30,30 +26,41 @@ export async function seedApplicationsIfEmpty() {
     consultingId = existingCategories.find((category) => category.name === 'Consulting')?.id ?? 3;
   }
 
-  await db.insert(applications).values([
-    {
-      companyName: 'Google',
-      roleTitle: 'Software Engineer',
-      applicationDate: '2026-02-01',
-      priorityScore: 5,
-      notes: 'Dream company',
-      categoryId: techId,
-    },
-    {
-      companyName: 'Deloitte',
-      roleTitle: 'Business Analyst',
-      applicationDate: '2026-02-03',
-      priorityScore: 4,
-      notes: 'Graduate programme',
-      categoryId: consultingId,
-    },
-    {
-      companyName: 'Amazon',
-      roleTitle: 'Operations Associate',
-      applicationDate: '2026-02-05',
-      priorityScore: 3,
-      notes: 'Backup option',
-      categoryId: financeId,
-    },
-  ]);
+  if (existingApplications.length === 0) {
+    await db.insert(applications).values([
+      {
+        companyName: 'Google',
+        roleTitle: 'Software Engineer',
+        applicationDate: '2026-02-01',
+        priorityScore: 5,
+        notes: 'Dream company',
+        categoryId: techId,
+      },
+      {
+        companyName: 'Deloitte',
+        roleTitle: 'Business Analyst',
+        applicationDate: '2026-02-03',
+        priorityScore: 4,
+        notes: 'Graduate programme',
+        categoryId: consultingId,
+      },
+      {
+        companyName: 'Amazon',
+        roleTitle: 'Operations Associate',
+        applicationDate: '2026-02-05',
+        priorityScore: 3,
+        notes: 'Backup option',
+        categoryId: financeId,
+      },
+    ]);
+  }
+
+  const existingTargets = await db.select().from(targets);
+
+  if (existingTargets.length === 0) {
+    await db.insert(targets).values([
+      { type: 'weekly', amount: 5 },
+      { type: 'monthly', amount: 20 },
+    ]);
+  }
 }

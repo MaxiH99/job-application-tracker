@@ -14,3 +14,9 @@ export const applications = sqliteTable('applications', {
   notes: text('notes'),
   categoryId: integer('category_id').notNull(),
 });
+
+export const targets = sqliteTable('targets', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  type: text('type').notNull(), // 'weekly' or 'monthly'
+  amount: integer('amount').notNull(),
+});

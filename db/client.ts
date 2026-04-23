@@ -23,4 +23,12 @@ sqlite.execSync(`
   );
 `);
 
+sqlite.execSync(`
+  CREATE TABLE IF NOT EXISTS targets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type TEXT NOT NULL,
+    amount INTEGER NOT NULL
+  );
+`);
+
 export const db = drizzle(sqlite);
