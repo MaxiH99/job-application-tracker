@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from 'react-native';
 
 type Props = {
@@ -8,7 +9,10 @@ type Props = {
 export default function ScreenHeader({ title, subtitle }: Props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <View style={styles.titleRow}>
+        <Ionicons name="briefcase-outline" size={22} color="#2563EB" />
+        <Text style={styles.title}>{title}</Text>
+      </View>
       {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
     </View>
   );
@@ -17,6 +21,11 @@ export default function ScreenHeader({ title, subtitle }: Props) {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 16,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   title: {
     color: '#111827',

@@ -65,7 +65,7 @@ export default function IndexScreen() {
         showsVerticalScrollIndicator={false}
       >
         <ScreenHeader
-          title="Applications"
+          title="Job Application Tracker"
           subtitle={`${applications.length} tracked`}
         />
 

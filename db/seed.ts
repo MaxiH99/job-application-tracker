@@ -55,6 +55,56 @@ export async function seedApplicationsIfEmpty() {
         categoryId: financeId,
         status: 'Rejected',
       },
+
+      {
+        companyName: 'Microsoft',
+        roleTitle: 'Cloud Engineer',
+        applicationDate: '2026-02-05',
+        priorityScore: 4,
+        notes: 'Azure Team',
+        categoryId: techId,
+        status: 'Applied',
+      },
+
+      {
+        companyName: 'KPMG',
+        roleTitle: 'Consulting Analyst',
+        applicationDate: '2026-02-05',
+        priorityScore: 3,
+        notes: 'Backup consulting',
+        categoryId: consultingId,
+        status: 'Rejected',
+      },
+
+      {
+        companyName: 'JP Morgan',
+        roleTitle: 'Finance Intern',
+        applicationDate: '2026-02-06',
+        priorityScore: 3,
+        notes: 'Finance experience needed',
+        categoryId: financeId,
+        status: 'Applied',
+      },
+
+      {
+        companyName: 'Stripe',
+        roleTitle: 'Engineer',
+        applicationDate: '2026-02-06',
+        priorityScore: 5,
+        notes: 'Good money',
+        categoryId: techId,
+        status: 'Applied',
+      },
+
+      {
+        companyName: 'Accenture',
+        roleTitle: 'Tech Analyst',
+        applicationDate: '2026-02-06',
+        priorityScore: 1,
+        notes: 'Big job',
+        categoryId: techId,
+        status: 'Interview',
+      },
     ]);
   }
 
