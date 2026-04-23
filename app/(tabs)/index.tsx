@@ -24,24 +24,32 @@ export default function IndexScreen() {
 
   const { applications } = context;
   const normalizedQuery = searchQuery.trim().toLowerCase();
+
   const priorityOptions = [
     'All',
     ...Array.from(
-      new Set(applications.map((application: Application) => String(application.priorityScore)))
+      new Set(
+        applications.map((application: Application) =>
+          String(application.priorityScore)
+        )
+      )
     ).sort((a, b) => Number(a) - Number(b)),
   ];
 
-  const filteredApplications = applications.filter((application: Application) => {
-    const matchesSearch =
-      normalizedQuery.length === 0 ||
-      application.companyName.toLowerCase().includes(normalizedQuery) ||
-      application.roleTitle.toLowerCase().includes(normalizedQuery);
+  const filteredApplications = applications.filter(
+    (application: Application) => {
+      const matchesSearch =
+        normalizedQuery.length === 0 ||
+        application.companyName.toLowerCase().includes(normalizedQuery) ||
+        application.roleTitle.toLowerCase().includes(normalizedQuery);
 
-    const matchesPriority =
-      selectedPriority === 'All' || String(application.priorityScore) === selectedPriority;
+      const matchesPriority =
+        selectedPriority === 'All' ||
+        String(application.priorityScore) === selectedPriority;
 
-    return matchesSearch && matchesPriority;
-  });
+      return matchesSearch && matchesPriority;
+    }
+  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -95,10 +103,15 @@ export default function IndexScreen() {
         showsVerticalScrollIndicator={false}
       >
         {filteredApplications.length === 0 ? (
-          <Text style={styles.emptyText}>No applications match your filters</Text>
+          <Text style={styles.emptyText}>
+            No applications match your filters
+          </Text>
         ) : (
           filteredApplications.map((application: Application) => (
-            <ApplicationCard key={application.id} application={application} />
+            <ApplicationCard
+              key={application.id}
+              application={application}
+            />
           ))
         )}
       </ScrollView>

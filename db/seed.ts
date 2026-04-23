@@ -1,11 +1,33 @@
 import { db } from './client';
-import { applications } from './schema';
+import { applications, categories } from './schema';
 
 export async function seedApplicationsIfEmpty() {
-  const existing = await db.select().from(applications);
+  const existingApplications = await db.select().from(applications);
 
-  if (existing.length > 0) {
+  if (existingApplications.length > 0) {
     return;
+  }
+
+  const existingCategories = await db.select().from(categories);
+
+  let techId: number;
+  let financeId: number;
+  let consultingId: number;
+
+  if (existingCategories.length === 0) {
+    const insertedCategories = await db.insert(categories).values([
+      { name: 'Tech' },
+      { name: 'Finance' },
+      { name: 'Consulting' },
+    ]).returning();
+
+    techId = insertedCategories[0].id;
+    financeId = insertedCategories[1].id;
+    consultingId = insertedCategories[2].id;
+  } else {
+    techId = existingCategories.find((category) => category.name === 'Tech')?.id ?? 1;
+    financeId = existingCategories.find((category) => category.name === 'Finance')?.id ?? 2;
+    consultingId = existingCategories.find((category) => category.name === 'Consulting')?.id ?? 3;
   }
 
   await db.insert(applications).values([
@@ -15,6 +37,7 @@ export async function seedApplicationsIfEmpty() {
       applicationDate: '2026-02-01',
       priorityScore: 5,
       notes: 'Dream company',
+      categoryId: techId,
     },
     {
       companyName: 'Deloitte',
@@ -22,6 +45,7 @@ export async function seedApplicationsIfEmpty() {
       applicationDate: '2026-02-03',
       priorityScore: 4,
       notes: 'Graduate programme',
+      categoryId: consultingId,
     },
     {
       companyName: 'Amazon',
@@ -29,6 +53,7 @@ export async function seedApplicationsIfEmpty() {
       applicationDate: '2026-02-05',
       priorityScore: 3,
       notes: 'Backup option',
+      categoryId: financeId,
     },
   ]);
 }

@@ -5,7 +5,7 @@ import { db } from '@/db/client';
 import { applications as applicationsTable } from '@/db/schema';
 import { useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ApplicationContext } from './_layout';
 
@@ -17,17 +17,21 @@ export default function AddApplication() {
   const [applicationDate, setApplicationDate] = useState('');
   const [priorityScore, setPriorityScore] = useState('');
   const [notes, setNotes] = useState('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
   if (!context) return null;
-  const { setApplications } = context;
+  const { setApplications, categories } = context;
 
   const saveApplication = async () => {
+    if (!selectedCategoryId) return;
+
     await db.insert(applicationsTable).values({
       companyName,
       roleTitle,
       applicationDate,
       priorityScore: Number(priorityScore),
       notes,
+      categoryId: selectedCategoryId,
     });
 
     const rows = await db.select().from(applicationsTable);
@@ -48,6 +52,35 @@ export default function AddApplication() {
           <FormField label="Application Date" value={applicationDate} onChangeText={setApplicationDate} />
           <FormField label="Priority Score" value={priorityScore} onChangeText={setPriorityScore} />
           <FormField label="Notes" value={notes} onChangeText={setNotes} />
+
+          <Text style={styles.categoryLabel}>Category</Text>
+          <View style={styles.categoryRow}>
+            {categories.map((category) => {
+              const isSelected = selectedCategoryId === category.id;
+
+              return (
+                <Pressable
+                  key={category.id}
+                  accessibilityLabel={`Select ${category.name} category`}
+                  accessibilityRole="button"
+                  onPress={() => setSelectedCategoryId(category.id)}
+                  style={[
+                    styles.categoryButton,
+                    isSelected && styles.categoryButtonSelected,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.categoryButtonText,
+                      isSelected && styles.categoryButtonTextSelected,
+                    ]}
+                  >
+                    {category.name}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
         </View>
 
         <PrimaryButton label="Save Application" onPress={saveApplication} />
@@ -73,5 +106,38 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginTop: 10,
+  },
+  categoryLabel: {
+    color: '#0F172A',
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 8,
+    marginTop: 10,
+  },
+  categoryRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 12,
+  },
+  categoryButton: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#94A3B8',
+    borderRadius: 999,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  categoryButtonSelected: {
+    backgroundColor: '#0F172A',
+    borderColor: '#0F172A',
+  },
+  categoryButtonText: {
+    color: '#0F172A',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  categoryButtonTextSelected: {
+    color: '#FFFFFF',
   },
 });

@@ -1,6 +1,7 @@
-import { Application } from '@/app/_layout';
+import { Application, ApplicationContext } from '@/app/_layout';
 import InfoTag from '@/components/ui/info-tag';
 import { useRouter } from 'expo-router';
+import { useContext } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 type Props = {
@@ -9,9 +10,18 @@ type Props = {
 
 export default function ApplicationCard({ application }: Props) {
   const router = useRouter();
+  const context = useContext(ApplicationContext);
+  
+  if (!context) return null;
+
+  const { categories } = context;
   const openDetails = () =>
     router.push({ pathname: '/application/[id]', params: { id: application.id.toString() } });
   const applicationSummary = `${application.companyName}, ${application.roleTitle}, Priority ${application.priorityScore}`;
+
+  const category = categories.find(
+    (c) => c.id === application.categoryId
+  );
 
   return (
     <Pressable
@@ -30,6 +40,10 @@ export default function ApplicationCard({ application }: Props) {
       <View style={styles.tags}>
         <InfoTag label="Role" value={application.roleTitle} />
         <InfoTag label="Priority" value={String(application.priorityScore)} />
+        <InfoTag
+          label="Category"
+          value={category ? category.name : 'Unknown'}
+        />
       </View>
     </Pressable>
   );
