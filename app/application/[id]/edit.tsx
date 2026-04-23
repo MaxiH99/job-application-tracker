@@ -180,8 +180,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   optionButtonSelected: {
-    backgroundColor: '#0F172A',
-    borderColor: '#0F172A',
+    backgroundColor: '#2563EB',
+    borderColor: '#2563EB',
   },
   optionButtonText: {
     color: '#0F172A',

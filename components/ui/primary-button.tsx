@@ -43,14 +43,14 @@ export default function PrimaryButton({
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: '#0F766E',
-    borderRadius: 10,
+    backgroundColor: '#2563EB',
+    borderRadius: 12,
     paddingHorizontal: 14,
-    paddingVertical: 11,
+    paddingVertical: 12,
   },
   secondary: {
-    backgroundColor: '#F8FAFC',
-    borderColor: '#94A3B8',
+    backgroundColor: '#F1F5F9',
+    borderColor: '#CBD5E1',
     borderWidth: 1,
   },
   danger: {

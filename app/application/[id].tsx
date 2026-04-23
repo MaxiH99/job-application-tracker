@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     width: 12,
   },
   categoryText: {
-    color: '#374151',
+    color: '#64748B',
     fontSize: 14,
     fontWeight: '500',
   },
@@ -115,6 +115,6 @@ const styles = StyleSheet.create({
   notes: {
     marginTop: 10,
     fontSize: 16,
-    color: '#374151',
+    color: '#475569',
   },
 });

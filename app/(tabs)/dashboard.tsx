@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   progressFill: {
-    backgroundColor: '#0F172A',
+    backgroundColor: '#2563EB',
     height: 12,
   },
   chartCard: {

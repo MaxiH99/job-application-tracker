@@ -159,8 +159,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   categoryButtonSelected: {
-    backgroundColor: '#0F172A',
-    borderColor: '#0F172A',
+    backgroundColor: '#2563EB',
+    borderColor: '#2563EB',
   },
   categoryButtonText: {
     color: '#0F172A',

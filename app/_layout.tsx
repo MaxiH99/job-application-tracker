@@ -10,7 +10,7 @@ export type Application = {
   roleTitle: string;
   applicationDate: string;
   priorityScore: number;
-  notes: string;
+  notes: string | null;
   categoryId: number;
   status: string;
 };

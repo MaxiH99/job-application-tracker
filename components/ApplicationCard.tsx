@@ -66,11 +66,15 @@ export default function ApplicationCard({ application }: Props) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#FFFFFF',
-    borderColor: '#E5E7EB',
+    borderColor: '#E2E8F0',
     borderRadius: 14,
     borderWidth: 1,
-    marginBottom: 12,
+    marginBottom: 16,
     padding: 14,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
   },
   cardPressed: {
     opacity: 0.88,
@@ -97,7 +101,7 @@ const styles = StyleSheet.create({
     width: 12,
   },
   categoryText: {
-    color: '#374151',
+    color: '#64748B',
     fontSize: 14,
     fontWeight: '500',
   },

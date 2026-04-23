@@ -78,6 +78,7 @@ export default function IndexScreen() {
           value={searchQuery}
           onChangeText={setSearchQuery}
           placeholder="Search by company or role"
+          placeholderTextColor="#94A3B8"
           style={styles.searchInput}
         />
 
@@ -172,13 +173,13 @@ const styles = StyleSheet.create({
     paddingTop: 14,
   },
   searchInput: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#94A3B8',
-    borderRadius: 10,
+    backgroundColor: '#F1F5F9',
+    borderColor: '#CBD5E1',
+    borderRadius: 12,
     borderWidth: 1,
     marginTop: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
   },
   filterLabel: {
     color: '#0F172A',
@@ -202,8 +203,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   filterButtonSelected: {
-    backgroundColor: '#0F172A',
-    borderColor: '#0F172A',
+    backgroundColor: '#2563EB',
+    borderColor: '#2563EB',
   },
   filterButtonText: {
     color: '#0F172A',
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   emptyText: {
-    color: '#475569',
+    color: '#64748B',
     fontSize: 16,
     paddingTop: 8,
     textAlign: 'center',

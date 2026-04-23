@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
   },
   selectedCircle: {
     borderWidth: 2,
-    borderColor: '#0F172A',
+    borderColor: '#2563EB',
   },
   cancelButton: {
     marginTop: 10,
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   smallButton: {
-    backgroundColor: '#0F172A',
+    backgroundColor: '#2563EB',
     borderRadius: 999,
     paddingHorizontal: 12,
     paddingVertical: 8,
