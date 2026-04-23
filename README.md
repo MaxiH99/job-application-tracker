@@ -24,3 +24,5 @@ https://drive.google.com/drive/folders/1LWpqJAUE-4-LUvc9h9aET80yTpoZFNzd?usp=sha
 GitHub Link:
 https://github.com/MaxiH99/job-application-tracker
 
+If anything else is needed please contant me:
+122314581@umail.ucc.ie
